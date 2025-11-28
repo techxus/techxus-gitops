@@ -1,40 +1,41 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-gateway
+  name: hello-api
   labels:
-    app: api-gateway
+    app: hello-api
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: api-gateway
+      app: hello-api
   template:
     metadata:
       labels:
-        app: api-gateway
+        app: hello-api
     spec:
       containers:
-        - name: api-gateway
-          image: techxus/api-gateway:1.0.2
+        - name: hello-api
+          image: ttechxus/api-gateway:2.0.0
           ports:
             - containerPort: 8080
           resources:
             requests:
-              cpu: "100m"
-              memory: "256Mi"
+              cpu: "50m"
+              memory: "128Mi"
             limits:
-              cpu: "500m"
-              memory: "512Mi"
+              cpu: "300m"
+              memory: "256Mi"
+          # simple probes (optional)
           livenessProbe:
             httpGet:
-              path: /actuator/health/liveness
+              path: /api/hello
               port: 8080
             initialDelaySeconds: 20
             periodSeconds: 30
           readinessProbe:
             httpGet:
-              path: /actuator/health/readiness
+              path: /api/hello
               port: 8080
             initialDelaySeconds: 10
             periodSeconds: 10
