@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: hello-api
-          image: ttechxus/api-gateway:2.0.0
+          image: techxus/api-gateway:2.0.0
           ports:
             - containerPort: 8080
           resources:
