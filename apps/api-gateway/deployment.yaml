@@ -16,8 +16,7 @@ spec:
     spec:
       containers:
         - name: api-gateway
-          # TODO: replace with your real image later
-          image: yourdocker/techxus-gateway:1.0
+          image: techxus/techxus-gateway:1.0
           ports:
             - containerPort: 8080
           resources:
