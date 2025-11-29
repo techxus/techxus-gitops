@@ -1,0 +1,14 @@
+grafana:
+  adminUser: admin
+  adminPassword: admin123   # change later
+  service:
+    type: ClusterIP
+    port: 80
+  ingress:
+    enabled: false          # we’ll just port-forward for now
+
+prometheus:
+  service:
+    type: ClusterIP
+
+# Let Prometheus discover K8s endpoints (defaults are okay)

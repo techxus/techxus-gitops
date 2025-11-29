@@ -1,0 +1,25 @@
+loki:
+  auth_enabled: false
+
+  persistence:
+    enabled: false   # OK for demo; use true + PVC in “real” prod
+
+promtail:
+  enabled: true
+  config:
+    server:
+      http_listen_port: 9080
+      grpc_listen_port: 0
+    positions:
+      filename: /var/log/positions.yaml
+    clients:
+      - url: http://loki.logging.svc.cluster.local:3100/loki/api/v1/push
+    scrape_configs:
+      - job_name: kubernetes-pods
+        pipeline_stages:
+          - docker: {}
+        static_configs:
+          - targets:
+              - localhost
+            labels:
+              __path__: /var/log/containers/*.log

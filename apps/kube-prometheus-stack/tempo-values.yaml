@@ -1,0 +1,22 @@
+tempo:
+  receivers:
+    otlp:
+      protocols:
+        http:
+        grpc:
+
+  storage:
+    traces:
+      backend: memory
+      wal:
+        enabled: false
+
+  server:
+    http_listen_port: 3200
+
+  metrics_generator:
+    enabled: true
+
+ingester:
+  max_block_bytes: 104857600
+  max_block_duration: 5m
