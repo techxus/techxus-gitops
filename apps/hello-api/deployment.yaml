@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hello-api
+  namespace: hello
   labels:
     app: hello-api
 spec:
@@ -16,26 +17,27 @@ spec:
     spec:
       containers:
         - name: hello-api
-          image: nginx:1.27-alpine
+          image: techxus/hello-api:1.0.0    # <-- Spring Boot image
+          imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 80
+            - containerPort: 8080
+              name: http
           resources:
             requests:
               cpu: "50m"
-              memory: "64Mi"
-            limits:
-              cpu: "200m"
               memory: "128Mi"
+            limits:
+              cpu: "300m"
+              memory: "256Mi"
           livenessProbe:
             httpGet:
-              path: /
-              port: 80
-            initialDelaySeconds: 10
+              path: /api/hello
+              port: 8080
+            initialDelaySeconds: 20
             periodSeconds: 30
           readinessProbe:
             httpGet:
-              path: /
-              port: 80
-            initialDelaySeconds: 5
+              path: /api/hello
+              port: 8080
+            initialDelaySeconds: 10
             periodSeconds: 10
-
