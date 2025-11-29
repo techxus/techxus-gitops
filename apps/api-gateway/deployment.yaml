@@ -1,24 +1,36 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hello-api
+  name: api-gateway
+  namespace: gateway            # <--- keep if you're using the "gateway" namespace
   labels:
-    app: hello-api
+    app: api-gateway
 spec:
   replicas: 2
+  revisionHistoryLimit: 3
   selector:
     matchLabels:
-      app: hello-api
+      app: api-gateway
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
   template:
     metadata:
       labels:
-        app: hello-api
+        app: api-gateway
     spec:
       containers:
-        - name: hello-api
-          image: techxus/api-gateway:2.0.0
+        - name: api-gateway
+          image: techxus/api-gateway:2.0.0      # <--- your gateway image
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
+              name: http
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "prod"
           resources:
             requests:
               cpu: "50m"
@@ -26,18 +38,18 @@ spec:
             limits:
               cpu: "300m"
               memory: "256Mi"
-          # simple probes (optional)
+          # Probes for Spring Boot + Actuator (adjust if you don't use Actuator)
           livenessProbe:
             httpGet:
-              path: /api/hello
+              path: /actuator/health/liveness
               port: 8080
-            initialDelaySeconds: 20
+            initialDelaySeconds: 30
             periodSeconds: 30
           readinessProbe:
             httpGet:
-              path: /api/hello
+              path: /actuator/health/readiness
               port: 8080
-            initialDelaySeconds: 10
+            initialDelaySeconds: 15
             periodSeconds: 10
-
-
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
