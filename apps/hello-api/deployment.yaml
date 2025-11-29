@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: hello-api
-          image: techxus/hello-api:2.0.0    # <-- Spring Boot image
+          image: techxus/hello-api:3.0.0    # <-- Spring Boot image
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
